@@ -21,6 +21,7 @@ public class PR1_1 {
         d.f = 1.1f;
         d.b = false;
         
+        /* Print the first integer, first float, and first boolean in the argument list */
         System.out.printf("Integer: %d, Float: %2f, Boolean: %s.\n", d.i, d.f, d.b);
     }
     
