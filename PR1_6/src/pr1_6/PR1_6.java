@@ -22,6 +22,9 @@ public class PR1_6 {
         for (int outerint = 2; outerint < 100; ++outerint) {
             boolean bisprime = true;
             
+            //PT: Useful here to break out of the loop when you find that outerint is not prime.
+            //  Also, you could break out of the loop at innerint <= outerint / 2
+            // for (int innerint = 2; innerint < outerint/2 && bisprime; innerint++)
             for (int innerint = 2; innerint < outerint; ++innerint) {
                 if (outerint % innerint == 0)
                     bisprime = false;
