@@ -16,6 +16,9 @@ public class PR1_5 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        //PT: This is a place where making a separate class might be useful. It's
+        //    not necessary, obviously, but it's good to get in the habit of separating
+        //    things out
         Random rand = new Random();
         int keystone = rand.nextInt(100) + 1;
         int random;
