@@ -19,8 +19,10 @@ public class PR1_2 {
     public static void main(String[] args) {
         
         /** Ensure that the args array has enough arguments to prevent OOB errors */
+        //PT: good
         if (args.length >= 3) {
             for(int i = 0; i < 3; ++i) {
+                //PT: You don't really need k here. It doesn't hurt anything, but it's not necessary
                 String k = args[i];
                 System.out.println(k);
             }

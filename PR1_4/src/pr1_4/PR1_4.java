@@ -22,7 +22,7 @@ public class PR1_4 {
        /**
         * Final is similar to Const in C++ 
         */
-       final double pi = 3.14;
+       final double pi = 3.14; //PT: Could easily use java.lang.Math.PI here, rather than your own constant
        
        /* Creates a scanner holding a line of user input */
        Scanner user_input = new Scanner(System.in);
