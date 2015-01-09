@@ -5,6 +5,7 @@
  */
 
 package pr2_2;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 /**
@@ -19,7 +20,7 @@ public class PR2_2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList gerbils = new ArrayList();
+        List gerbils = new ArrayList();
         
         for (int i=0; i < 10; ++i) {
             gerbils.add(new Gerbil());
