@@ -23,10 +23,8 @@ public class PR2_1 {
             gerbils.add(new Gerbil());
         }
         
-        for (int i=0; i < gerbils.size(); ++i) {
-            Gerbil temp_gerbil = (Gerbil)gerbils.get(i);
-            temp_gerbil.Hop();
-        }
+        GerbilArray furryFriends = new GerbilArray(gerbils);
+        furryFriends.CommenceHopping();
     }
     
 }

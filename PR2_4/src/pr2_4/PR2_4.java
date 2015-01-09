@@ -21,13 +21,8 @@ public class PR2_4 {
      */
     public static void main(String[] args) {
       Scanner scanner = new Scanner(System.in);
-      int series_depth = scanner.nextInt();
-       
-      PiSeries series = new PiSeries(series_depth);
-      System.out.printf("Pi using a series of %d elements: %f.\n" , series_depth, series.CalcSeries());
-       
-      series = new PiSeries(200000);
-      System.out.printf("Pi using a series of 200000 elements: %f.\n", series.CalcSeries());
+      int seriesDepth = scanner.nextInt();
+      PiSeriesCalculator ourSeries = new PiSeriesCalculator();
+      ourSeries.CalcSeries(seriesDepth);
     }
-    
 }

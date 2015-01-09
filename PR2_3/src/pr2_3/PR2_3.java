@@ -22,24 +22,15 @@ public class PR2_3 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Map gerbils = new HashMap();
+        Map<Integer, Gerbil> gerbils = new HashMap();
         
         for (int i=0; i < 10; ++i) {
             gerbils.put(Gerbil.GetCurrentID(), new Gerbil());
         }
         
         Iterator gerbiliter = gerbils.keySet().iterator();
-        
-        /**
-         * Print the hash key of each Gerbil after searching for its ID number,
-         * then tell it to <code>Hop</code>
-         */
-        while (gerbiliter.hasNext()) {
-           Gerbil temp_gerbil = (Gerbil)gerbils.get(gerbiliter.next());
-           
-           System.out.printf("Gerbil number %d has a key of %d\n" , temp_gerbil.GetID(), temp_gerbil.hashCode());
-           temp_gerbil.Hop();
-        }
+        GerbilHashMap theGuys = new GerbilHashMap((HashMap) gerbils);
+        theGuys.RollCall(gerbiliter);        
     }
     
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package pr2_4;
+package pr2_5;
 import java.lang.Math;
 
 
