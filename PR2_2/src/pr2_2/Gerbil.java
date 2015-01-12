@@ -5,7 +5,8 @@
  */
 
 package pr2_2;
-
+//PT -- you don't need to copy your class here. import PR2_1, and you'll
+//      have the original. -2
 /**
  * A Gerbil is responsible for knowing its ID number as well as hopping behavior
  * @author showland17

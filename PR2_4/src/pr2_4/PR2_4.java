@@ -21,6 +21,7 @@ public class PR2_4 {
      */
     public static void main(String[] args) {
       Scanner scanner = new Scanner(System.in);
+      //PT -- should prompt the user before waiting for input. -2
       int seriesDepth = scanner.nextInt();
       PiSeriesCalculator ourSeries = new PiSeriesCalculator();
       ourSeries.CalcSeries(seriesDepth);
