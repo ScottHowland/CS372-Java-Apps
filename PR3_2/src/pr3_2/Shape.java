@@ -11,6 +11,8 @@ package pr3_2;
  * @author showland17
  */
 public class Shape {
+    protected String name;
+    
     /**
      * The to-be-overridden method to calculate a Shape's area
      * @return The default area for shapes
@@ -21,4 +23,6 @@ public class Shape {
      * @return The default perimeter for shapes
      */
     public double getPerimeter() {return 0;}
+    
+    public String name() {return name;}
 }

@@ -12,8 +12,7 @@ package pr3_2;
  * @author showland17
  */
 public class Rectangle extends Shape {
-    private int width;
-    private int height;
+    private int width, height;
     
     /**
      * Determine whether a Rectangle can be constructed with the supplied values.
@@ -23,13 +22,14 @@ public class Rectangle extends Shape {
      * @param height the height-to-be of the Rectangle
      * @throws IllegalArgumentException 
      */
-    public Rectangle (int width, int height) throws IllegalArgumentException {
+    public Rectangle (int width, int height, String name) throws IllegalArgumentException {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
         
         this.width = width;
         this.height = height;
+        this.name = name;
     }
 
     /**

@@ -23,13 +23,14 @@ public class Ellipse extends Shape {
      * @param r2 the second radius value of the Ellipse
      * @throws IllegalArgumentException 
      */
-    public Ellipse (int r1, int r2) throws IllegalArgumentException {
+    public Ellipse (int r1, int r2, String name) throws IllegalArgumentException {
         if (r1 <= 0 || r2 <= 0) {
             throw new IllegalArgumentException();
         }
         
         this.r1 = r1;
         this.r2 = r2;
+        this.name = name;
     }
     
     /**

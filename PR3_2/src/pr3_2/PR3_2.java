@@ -16,24 +16,24 @@ public class PR3_2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
-        //Triangle tri = new Triangle (1,1,1);
-        Triangle tri2 = new Triangle (2, 2, 3);
-        //Rectangle rect = new Rectangle (0,1);
-        Rectangle rect2 = new Rectangle (2,2);
-        //Ellipse ell = new Ellipse (0, 1);
-        Ellipse ell2 = new Ellipse (5,7);
+        ShapeContainer shapeBox = new ShapeContainer();
         
-        System.out.println(tri2.getArea());
-        System.out.println(tri2.getPerimeter());
-        System.out.println(rect2.getArea());
-        System.out.println(rect2.getPerimeter());
-        System.out.println(ell2.getArea());
-        System.out.println(ell2.getPerimeter());
+        //commented Shapes should produce exceptions when uncommented
+        try {
+        //Triangle triExcept = new Triangle (1,9,20, "triExcept");
+        Triangle tri = new Triangle (2, 2, 3, "tri");
+        //Rectangle rectExcept = new Rectangle (0,1, "rectExcept");
+        Rectangle rect = new Rectangle (2,2, "rect");
+        //Ellipse ellExcept = new Ellipse (0, 1, "ellExcept");
+        Ellipse ell = new Ellipse (5,7, "ell");
+        
+        shapeBox.addShapes(tri, rect, ell);
         }
         catch (IllegalArgumentException e) {
-            System.out.println("Houston, we've had a goof.\n");
+            System.out.println("A shape has unconstructable parameters.\n");
         }
+        
+        shapeBox.printStats();
     }
     
 }
