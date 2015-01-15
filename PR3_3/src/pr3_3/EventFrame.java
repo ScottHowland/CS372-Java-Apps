@@ -8,6 +8,7 @@ package pr3_3;
 
 import java.util.regex.*;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -97,7 +98,7 @@ public class EventFrame extends javax.swing.JFrame {
         AppointmentList.setModel(new DefaultListModel<String>() {
             public int getSize() { return appointments.size();}
             public String getElement(int i) { return appointments.get(i);}
-            publci void addElement(String f) { appointments.add(f);}
+            public void addElement(String f) { appointments.add(f);}
             public void add(int i, String f) { appointments.add(i,f);}
         });
         jScrollPane1.setViewportView(AppointmentList);

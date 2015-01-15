@@ -137,7 +137,7 @@
             <Component class="javax.swing.JList" name="AppointmentList">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultListModel&lt;String&gt;() {&#xd;&#xa;    public int getSize() { return appointments.size();}&#xd;&#xa;    public String getElement(int i) { return appointments.get(i);}&#xd;&#xa;    publci void addElement(String f) { appointments.add(f);}&#xd;&#xa;    public void add(int i, String f) { appointments.add(i,f);}&#xd;&#xa;}" type="code"/>
+                  <Connection code="new DefaultListModel&lt;String&gt;() {&#xd;&#xa;    public int getSize() { return appointments.size();}&#xd;&#xa;    public String getElement(int i) { return appointments.get(i);}&#xd;&#xa;    public void addElement(String f) { appointments.add(f);}&#xd;&#xa;    public void add(int i, String f) { appointments.add(i,f);}&#xd;&#xa;}" type="code"/>
                 </Property>
               </Properties>
             </Component>
