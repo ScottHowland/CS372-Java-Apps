@@ -7,22 +7,31 @@
 package pr3_3;
 
 import java.util.regex.*;
+import java.io.File;
 
 /**
  *
  * @author showland17
  */
 public class EventFrame extends javax.swing.JFrame {
-    
-    int sortStatus;
-    FileIO dateIO = new FileIO("C:\\Users\\showland17\\Documents\\GitHub\\CS372-Java-Apps\\PR3_3\\dates\\dates.txt");
     AppointmentManager manager = new AppointmentManager();
+    int sortStatus;
+    String fileName = "C:\\Users\\showland17\\Documents\\GitHub\\CS372-Java-Apps\\PR3_3\\dates\\dates.txt";
+    File f = new File(fileName);
+    FileIO dateIO = new FileIO(fileName);
     
     /**
      * Creates new form EventFrame
      */
     public EventFrame() {
         initComponents();
+        try {
+        f.createNewFile();
+        }
+        
+        catch (java.io.IOException ex) {
+            System.out.println("IO Exception.\n");
+        }
         readAppts();
         printAppts();
     }
