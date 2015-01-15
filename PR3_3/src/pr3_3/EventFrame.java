@@ -7,17 +7,16 @@
 package pr3_3;
 
 import java.util.regex.*;
-import java.util.ArrayList;
-import javax.swing.DefaultListModel;
 
 /**
  *
  * @author showland17
  */
 public class EventFrame extends javax.swing.JFrame {
-
+    
+    int sortStatus;
     FileIO dateIO = new FileIO("C:\\Users\\showland17\\Documents\\GitHub\\CS372-Java-Apps\\PR3_3\\dates\\dates.txt");
-    ArrayList<String> appointments = new ArrayList();
+    AppointmentManager manager = new AppointmentManager();
     
     /**
      * Creates new form EventFrame
@@ -25,24 +24,57 @@ public class EventFrame extends javax.swing.JFrame {
     public EventFrame() {
         initComponents();
         readAppts();
+        printAppts();
     }
     
+    /**
+     * Prints every Appointment currently stored in the manager to the text 
+     * display area
+     */
+    private void printAppts() {
+        for (Appointment s : manager.appointments()) {
+            String appt = s.Title() + " : " + s.Location() + " : " + s.Date();
+            fldApptArea.append(appt);
+            fldApptArea.append("\n");
+        }
+    }
+    
+    /**
+     * Reads all appointments from the file set aside for the EventFrame
+     */
     private void readAppts() {
-        dateIO.ReadAll(appointments);        
+        dateIO.ReadAll(manager.appointments());
+        manager.dateSort();
+        sortStatus = 0;
     }
     
+    /**
+     * Parses the user's date input. If it matches the format for a yyyy/mm/dd 
+     * entry, then a new appointment is added to the manager using the user's
+     * inputs, then written to the file set aside for the EventFrame
+     */
     private void addAppt() {
         int intDate = 0;
         String dateText = DateEntryField.getText();
-        Pattern p = Pattern.compile("(0?[1-9]|[12][0-9]|3[01])[- /.](0?[1-9]|1[012])[- /.]((19|20))");
+        Pattern p = Pattern.compile( "((19|20))\\d{2}[- /.](0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])");
         Matcher m = p.matcher(dateText);
         
+        //If the parsing fails, we don't want to take any action
         if (m.find()) {
             String nameText = NameEntryField.getText();
             String locText = LocationEntryField.getText();
-            String appt = nameText + " : " + locText + " : " + dateText;
-            appointments.add(appt);
-            dateIO.Write(appt);
+            String appt = nameText + "" + locText + "" + dateText;
+            manager.appointments().add(new Appointment (nameText, locText, dateText));
+            dateIO.Write(nameText, locText, dateText);
+            
+            if (sortStatus == 0)
+               manager.dateSort();
+            else if (sortStatus == 1)
+                manager.titleSort();
+            else
+                manager.locationSort();
+            fldApptArea.setText("");
+            printAppts();
        }
     }
 
@@ -60,15 +92,15 @@ public class EventFrame extends javax.swing.JFrame {
         NameEntryField = new javax.swing.JTextField();
         LocationEntryField = new javax.swing.JTextField();
         Header = new javax.swing.JLabel();
-        NameSort = new javax.swing.JButton();
+        TitleSort = new javax.swing.JButton();
         LocationSort = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        AppointmentList = new javax.swing.JList();
+        fldApptArea = new javax.swing.JTextArea();
+        DateSort = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        DateEntryField.setText("dd/mm/yyyy");
+        DateEntryField.setText("yyyy/mm/dd");
 
         AddEvent.setText("Add Event!");
         AddEvent.addActionListener(new java.awt.event.ActionListener() {
@@ -84,7 +116,12 @@ public class EventFrame extends javax.swing.JFrame {
         Header.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         Header.setText("Your Calendar");
 
-        NameSort.setText("Name");
+        TitleSort.setText("Title");
+        TitleSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TitleSortActionPerformed(evt);
+            }
+        });
 
         LocationSort.setText("Location");
         LocationSort.addActionListener(new java.awt.event.ActionListener() {
@@ -95,15 +132,16 @@ public class EventFrame extends javax.swing.JFrame {
 
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        AppointmentList.setModel(new DefaultListModel<String>() {
-            public int getSize() { return appointments.size();}
-            public String getElement(int i) { return appointments.get(i);}
-            public void addElement(String f) { appointments.add(f);}
-            public void add(int i, String f) { appointments.add(i,f);}
-        });
-        jScrollPane1.setViewportView(AppointmentList);
+        fldApptArea.setColumns(20);
+        fldApptArea.setRows(5);
+        jScrollPane2.setViewportView(fldApptArea);
 
-        jScrollPane2.setViewportView(jScrollPane1);
+        DateSort.setText("Date");
+        DateSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DateSortActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,17 +156,19 @@ public class EventFrame extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(NameEntryField, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(LocationEntryField, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(LocationEntryField, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(DateEntryField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(AddEvent))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(NameSort, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TitleSort, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LocationSort))
+                        .addComponent(LocationSort)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(DateSort))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,10 +181,12 @@ public class EventFrame extends javax.swing.JFrame {
                     .addComponent(AddEvent)
                     .addComponent(NameEntryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LocationEntryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(NameSort)
-                    .addComponent(LocationSort, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 34, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(TitleSort)
+                        .addComponent(DateSort))
+                    .addComponent(LocationSort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -153,14 +195,52 @@ public class EventFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * When the "Location" button is pressed, the manager sorts its Appointment
+     * array by location, clears the current displayed text, then prints the
+     * sorted list
+     * @param evt 
+     */
     private void LocationSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LocationSortActionPerformed
-        // TODO add your handling code here:
+        manager.locationSort();
+        sortStatus = 2;
+        fldApptArea.setText("");
+        printAppts();
     }//GEN-LAST:event_LocationSortActionPerformed
 
+    /**
+     * Starts the parsing/list updating/file writing process
+     * @param evt The user's button press
+     */
     private void AddEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddEventActionPerformed
             addAppt();
-            readAppts();
     }//GEN-LAST:event_AddEventActionPerformed
+
+    /**
+     * When the "Title" button is pressed, the manager sorts its Appointment
+     * array by title, clears the current displayed text, then prints the
+     * sorted list
+     * @param evt The user's button press
+     */
+    private void TitleSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TitleSortActionPerformed
+        manager.titleSort();
+        sortStatus = 1;
+        fldApptArea.setText("");
+        printAppts();
+    }//GEN-LAST:event_TitleSortActionPerformed
+
+    /**
+     * When the "Date" button is pressed, the manager sorts its Appointment
+     * array by date, clears the current displayed text, then prints the
+     * sorted list
+     * @param evt The user's button press
+     */
+    private void DateSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DateSortActionPerformed
+         manager.dateSort();
+         sortStatus = 0;
+        fldApptArea.setText("");
+        printAppts();
+    }//GEN-LAST:event_DateSortActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,14 +279,14 @@ public class EventFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddEvent;
-    private javax.swing.JList AppointmentList;
     private javax.swing.JTextField DateEntryField;
+    private javax.swing.JButton DateSort;
     private javax.swing.JLabel Header;
     private javax.swing.JTextField LocationEntryField;
     private javax.swing.JButton LocationSort;
     private javax.swing.JTextField NameEntryField;
-    private javax.swing.JButton NameSort;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton TitleSort;
+    private javax.swing.JTextArea fldApptArea;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

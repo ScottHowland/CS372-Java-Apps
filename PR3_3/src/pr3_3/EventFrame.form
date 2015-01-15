@@ -32,7 +32,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="NameEntryField" min="-2" pref="73" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="LocationEntryField" min="-2" pref="58" max="-2" attributes="0"/>
+                              <Component id="LocationEntryField" min="-2" pref="73" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="DateEntryField" min="-2" pref="97" max="-2" attributes="0"/>
                           </Group>
@@ -41,13 +41,15 @@
                       <Component id="AddEvent" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="NameSort" min="-2" pref="73" max="-2" attributes="0"/>
+                      <Component id="TitleSort" min="-2" pref="73" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="LocationSort" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="DateSort" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane2" alignment="0" min="-2" pref="333" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="63" max="32767" attributes="0"/>
+              <EmptySpace pref="48" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -63,10 +65,13 @@
                   <Component id="NameEntryField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="LocationEntryField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="34" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="NameSort" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="LocationSort" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+              <EmptySpace type="separate" pref="34" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="TitleSort" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="DateSort" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="LocationSort" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" pref="134" max="-2" attributes="0"/>
@@ -78,7 +83,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="DateEntryField">
       <Properties>
-        <Property name="text" type="java.lang.String" value="dd/mm/yyyy"/>
+        <Property name="text" type="java.lang.String" value="yyyy/mm/dd"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="AddEvent">
@@ -107,10 +112,13 @@
         <Property name="text" type="java.lang.String" value="Your Calendar"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="NameSort">
+    <Component class="javax.swing.JButton" name="TitleSort">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Name"/>
+        <Property name="text" type="java.lang.String" value="Title"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TitleSortActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="LocationSort">
       <Properties>
@@ -127,23 +135,21 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-          <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-          </AuxValues>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JList" name="AppointmentList">
-              <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultListModel&lt;String&gt;() {&#xd;&#xa;    public int getSize() { return appointments.size();}&#xd;&#xa;    public String getElement(int i) { return appointments.get(i);}&#xd;&#xa;    public void addElement(String f) { appointments.add(f);}&#xd;&#xa;    public void add(int i, String f) { appointments.add(i,f);}&#xd;&#xa;}" type="code"/>
-                </Property>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
+        <Component class="javax.swing.JTextArea" name="fldApptArea">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="DateSort">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Date"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DateSortActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
