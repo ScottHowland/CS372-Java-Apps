@@ -18,13 +18,13 @@ import javax.swing.SwingUtilities;
  * @author Scott
  */
 public class SandBox {
-    private HexTile tile = new HexTile(50,0,0,0);
-    private HexTile tile2 = new HexTile(50,0,-1,1);
-    private HexTile tile3 = new HexTile(50,1,-1,0);
-    private HexTile tile4 = new HexTile (50,1,-2,1);
-    private HexTile tile5 = new HexTile (50,0,-2,2);
-    private HexTile tile6 = new HexTile (50,2,-2,0);
-    private HexTile tile7 = new HexTile (50,2,-1,-1);
+    private HexTile tile = new HexTile(50,0,0,0, true);
+    private HexTile tile2 = new HexTile(50,0,-1,1, false);
+    private HexTile tile3 = new HexTile(50,1,-1,0, false);
+    private HexTile tile4 = new HexTile (50,1,-2,1, true);
+    private HexTile tile5 = new HexTile (50,0,-2,2, false);
+    private HexTile tile6 = new HexTile (50,2,-2,0, true);
+    private HexTile tile7 = new HexTile (50,2,-1,-1, false);
     private HexTile[] grid = {tile, tile2, tile3, tile4, tile5, tile6, tile7};
     private JFrame screen;    
     
@@ -41,10 +41,14 @@ public class SandBox {
             @Override
             public void paint (Graphics g) {
                 for (HexTile t : grid) {
-                g.setColor(Color.red);
-                g.fillPolygon(t.cornerXCords(), t.cornerYCords(), 6);
+                    
+                if (t.isOn())
+                     g.setColor(Color.yellow);                
+                else
+                    g.setColor(Color.GRAY);
+                g.fillPolygon(t.cornerXCoords(), t.cornerYCoords(), 6);
                 g.setColor(Color.black);
-                g.drawPolygon(t.cornerXCords(), t.cornerYCords(), 6);
+                g.drawPolygon(t.cornerXCoords(), t.cornerYCoords(), 6);
                 }
             }
         
