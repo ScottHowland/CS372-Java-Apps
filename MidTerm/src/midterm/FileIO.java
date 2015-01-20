@@ -8,7 +8,6 @@ package midterm;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.lang.Integer;
 /**
  * FileIO allows reading and writing of data to and from a given file
  * @author showland17
