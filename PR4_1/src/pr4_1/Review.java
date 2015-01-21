@@ -13,4 +13,34 @@ package pr4_1;
 public class Review {
     private String establishmentName, address, notes;
     private Integer rating;
+    
+    public Review (String name, String address, String notes, int rating) {
+        this.establishmentName = name;
+        this.address = address;
+        this.notes = notes;
+        this.rating = rating;
+    }
+    
+    public String establishment() {
+        return establishmentName;
+    }
+    
+    public String address() {
+        return address;
+    }
+    
+    public String notes() {
+        return notes;
+    }
+    
+    public Integer rating() {
+        return rating;
+    }
+    
+    public void setFields(String name, String address, String notes, int rating) {
+        this.establishmentName = name;
+        this.address = address;
+        this.notes = notes;
+        this.rating = rating;
+    }
 }

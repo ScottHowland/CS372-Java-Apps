@@ -5,6 +5,7 @@
  */
 package pr4_1;
 
+import java.util.ArrayList;
 import java.io.*;
 /**
  *
@@ -12,8 +13,11 @@ import java.io.*;
  */
 public class Reviewer extends javax.swing.JFrame {
 
+    private ArrayList<Review> reviews = new ArrayList();
     private File dir, database;
     private FileIO reviewRW;
+    private int rating = -1;
+    private String reviewBlocks = "";
     
     /**
      * Creates new form Reviewer
@@ -22,6 +26,26 @@ public class Reviewer extends javax.swing.JFrame {
         initComponents();
         setupFiles();
         buildRatingGroup();
+        
+        try {
+            reviewRW.readReviews(reviews);
+            getRevText();
+        }
+        
+        catch (Exception ex) {
+            System.out.println("Error initializing notes pane");
+        }
+    }
+    
+    private void getRevText() {
+        reviewBlocks = "";
+        for (Review r : reviews) {
+            reviewBlocks += assembleReview(r.establishment(), r.address(), r.notes(), r.rating()) + "\n";
+        }
+        
+        if (!reviews.isEmpty()) {
+            ReviewPane.setText(reviewBlocks);
+        }
     }
     
     private void setupFiles() {
@@ -80,9 +104,14 @@ public class Reviewer extends javax.swing.JFrame {
         FourRating = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        ReviewPane = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Restaurant Name:");
@@ -98,10 +127,16 @@ public class Reviewer extends javax.swing.JFrame {
 
         AddReview.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         AddReview.setText("Add A New Review");
+        AddReview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddReviewActionPerformed(evt);
+            }
+        });
 
-        NameField.setText("                                ");
+        NameField.setText("Ex: Dave's Joint");
+        NameField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
-        AddressField.setText("                                ");
+        AddressField.setText("Ex: 1234 Main Street, Spokane");
         AddressField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddressFieldActionPerformed(evt);
@@ -111,10 +146,25 @@ public class Reviewer extends javax.swing.JFrame {
         jScrollPane1.setViewportView(NotePane);
 
         OneRating.setText("1");
+        OneRating.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OneRatingActionPerformed(evt);
+            }
+        });
 
         FiveRating.setText("5");
+        FiveRating.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FiveRatingActionPerformed(evt);
+            }
+        });
 
         TwoRating.setText("2");
+        TwoRating.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TwoRatingActionPerformed(evt);
+            }
+        });
 
         ThreeRating.setText("3");
         ThreeRating.addActionListener(new java.awt.event.ActionListener() {
@@ -137,47 +187,45 @@ public class Reviewer extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 107, Short.MAX_VALUE)
-                                .addComponent(AddReview)))
-                        .addGap(106, 106, 106))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(NameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AddressField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(AddReview)
+                                .addGap(0, 88, Short.MAX_VALUE))
+                            .addComponent(AddressField)
+                            .addComponent(NameField)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(31, 31, 31)
                                 .addComponent(OneRating)
-                                .addGap(3, 3, 3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(TwoRating)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ThreeRating)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(2, 2, 2)
                                 .addComponent(FourRating)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(FiveRating)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(17, 17, 17)
                 .addComponent(AddReview)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(NameField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(NameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(7, 7, 7)
@@ -197,16 +245,16 @@ public class Reviewer extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         ReviewerTabs.addTab("Add Review", jPanel1);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        ReviewPane.setEditable(false);
+        ReviewPane.setColumns(20);
+        ReviewPane.setRows(5);
+        jScrollPane2.setViewportView(ReviewPane);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -244,13 +292,59 @@ public class Reviewer extends javax.swing.JFrame {
     }//GEN-LAST:event_AddressFieldActionPerformed
 
     private void ThreeRatingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThreeRatingActionPerformed
-        // TODO add your handling code here:
+        rating = 3;
     }//GEN-LAST:event_ThreeRatingActionPerformed
 
     private void FourRatingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FourRatingActionPerformed
-        // TODO add your handling code here:
+        rating = 4;
     }//GEN-LAST:event_FourRatingActionPerformed
 
+    private void AddReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddReviewActionPerformed
+        String establishment="", address="", notes="";
+        
+        try {
+            establishment = NameField.getText();
+            address = AddressField.getText();
+            notes = NotePane.getText();
+            if (rating == -1) 
+                throw new IllegalArgumentException();
+            
+            Review newReview = new Review(establishment, address, notes, rating);
+            reviews.add(newReview);
+            getRevText();
+            ReviewPane.setText(reviewBlocks);
+        }
+        
+        catch (Exception ex) {
+            System.out.println("Error creating review. Check input.");
+        }
+    }//GEN-LAST:event_AddReviewActionPerformed
+
+    private void OneRatingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OneRatingActionPerformed
+        rating  = 1;
+    }//GEN-LAST:event_OneRatingActionPerformed
+
+    private void TwoRatingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TwoRatingActionPerformed
+        rating = 2;
+    }//GEN-LAST:event_TwoRatingActionPerformed
+
+    private void FiveRatingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FiveRatingActionPerformed
+        rating = 5;
+    }//GEN-LAST:event_FiveRatingActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        reviewRW.writeReviews(reviews);
+    }//GEN-LAST:event_formWindowClosing
+
+     private String assembleReview(String name, String address, String notes, int rating) {
+         String review = "Restaurant: " + name + "\n";
+         review += "Location: " + address + "\n";
+         review += "Rating: " + rating + "/5\n";
+         review += "Additional notes: " + notes + "\n";
+         
+         return review;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -295,6 +389,7 @@ public class Reviewer extends javax.swing.JFrame {
     private javax.swing.JTextPane NotePane;
     private javax.swing.JRadioButton OneRating;
     private javax.swing.ButtonGroup RatingGroup;
+    private javax.swing.JTextArea ReviewPane;
     private javax.swing.JTabbedPane ReviewerTabs;
     private javax.swing.JRadioButton ThreeRating;
     private javax.swing.JRadioButton TwoRating;
@@ -306,6 +401,5 @@ public class Reviewer extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
