@@ -26,7 +26,8 @@ public class Reviewer extends javax.swing.JFrame {
         initComponents();
         setupFiles();
         buildRatingGroup();
-        
+        //Attempts to read the reviews on file and initialize them to the 
+        //"old notes" pane
         try {
             reviewRW.readReviews(reviews);
             getRevText();
@@ -37,6 +38,9 @@ public class Reviewer extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Initializes the reviews on file to the "old notes" tab
+     */
     private void getRevText() {
         reviewBlocks = "";
         for (Review r : reviews) {
@@ -48,6 +52,10 @@ public class Reviewer extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Creates the directories and files necessary to facilitate file IO 
+     * for the application
+     */
     private void setupFiles() {
         dir = new File("notes");        
         try {
@@ -68,6 +76,10 @@ public class Reviewer extends javax.swing.JFrame {
         reviewRW = new FileIO(database.getPath());
     }
     
+    /**
+     * Constructs the group of buttons to be used in assigning a rating to a 
+     * restaurant
+     */
     private void buildRatingGroup() {
         RatingGroup.add(OneRating);
         RatingGroup.add(TwoRating);
@@ -299,6 +311,12 @@ public class Reviewer extends javax.swing.JFrame {
         rating = 4;
     }//GEN-LAST:event_FourRatingActionPerformed
 
+    /**
+     * When the "Add Review" button is pressed, try to gather information from the 
+     * various UI components and, if the necessary information is entered, create
+     * a new review
+     * @param evt 
+     */
     private void AddReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddReviewActionPerformed
         String establishment="", address="", notes="";
         
@@ -336,6 +354,14 @@ public class Reviewer extends javax.swing.JFrame {
         reviewRW.writeReviews(reviews);
     }//GEN-LAST:event_formWindowClosing
 
+    /**
+     * Creates a review from a collection of information
+     * @param name The name of the restaurant
+     * @param address The restaurant's location
+     * @param notes The review body or additional comments
+     * @param rating The review rating, out of five
+     * @return The newly-constructed interview
+     */
      private String assembleReview(String name, String address, String notes, int rating) {
          String review = "Restaurant: " + name + "\n";
          review += "Location: " + address + "\n";

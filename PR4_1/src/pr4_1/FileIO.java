@@ -9,16 +9,27 @@ package pr4_1;
 import java.util.ArrayList;
 import java.io.*;
 /**
- *
+ * A <code>FileIO</code> stores a string value representing the filepath of the
+ * file it will interact with, as well as methods to write and read reviews 
+ * specific to the restaurant reviewer application
  * @author Scott
  */
 public class FileIO {
-    String filePath;
+    private final String filePath;
     
+    /**
+     * Establishes the file path to be used by the IO object
+     * @param filePath 
+     */
     public FileIO(String filePath) {
         this.filePath = filePath;
     }
     
+    /**
+     * Writes the data fields associated with a <code>Review</code> in a format
+     * conductive to reading the fields back into the application later
+     * @param reviews The ArrayList of <code>Reviews</code> used by the application
+     */
     public void writeReviews(ArrayList<Review> reviews) {
         try {
             BufferedWriter wrtr = new BufferedWriter (new FileWriter (filePath, false));
@@ -45,6 +56,11 @@ public class FileIO {
         }
     }
     
+    /**
+     * Reads the text file containing the reviews used by the application
+     * @param reviews
+     * @return 
+     */
     public String readReviews(ArrayList<Review> reviews) {
         String reviewBlock = "", line;
         
