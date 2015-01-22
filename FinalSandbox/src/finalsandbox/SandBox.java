@@ -5,6 +5,7 @@
  */
 package finalsandbox;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Iterator;
@@ -12,13 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.ArrayList;
-
-import java.applet.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,7 +24,8 @@ import javax.swing.SwingUtilities;
  */
 public class SandBox {
    private HexGrid grid;
-   private JFrame screen;   
+   private JFrame screen;
+   private AudioManager dj;
     
     public SandBox() {
         initComponents();
@@ -39,10 +34,14 @@ public class SandBox {
     private void initComponents() {
         screen = new JFrame();
         screen.setResizable(false);
+        screen.getContentPane().setBackground(Color.red);
         screen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         grid = new HexGrid();
+        dj = new AudioManager();
         
-        JPanel p;
+        dj.playSoundLoop("Music/background.mp3");
+        
+       JPanel p;
        p = new JPanel() {
            @Override
            public void paint (Graphics g) {
@@ -58,15 +57,17 @@ public class SandBox {
            }
        };
         
-    p.addMouseListener(new MouseListener() { 
+        
+        p.addMouseListener(new MouseListener() { 
         
         @Override
         public void mouseReleased(MouseEvent e) {
             Iterator iter = grid.tiles().entrySet().iterator();
             for (HexTile tile : grid.tiles().values()) {
                 if (tile.contains(e.getX(), e.getY())) {
-                    playSoundOnce(tile.soundPath());
+                    dj.playSoundOnce(tile.soundPath());
                     ArrayList<HexTile> toggleTargets = includeNeighbors(tile);
+                    
                     for (HexTile hex : toggleTargets)
                         hex.toggle();
                     p.repaint();
@@ -93,25 +94,7 @@ public class SandBox {
         screen.pack();
         screen.setVisible(true);
     }
-    
-    public static void playSoundOnce(String musicname) {
-        try {
-            AudioClip sound = Applet.newAudioClip(new URL("file:./"+musicname));
-            sound.play();
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(SandBox.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
-    public static void playSoundLoop(String musicname){
-        try {
-            AudioClip sound = Applet.newAudioClip(new URL("file:./"+musicname));
-            sound.loop();
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(SandBox.class.getName()).log(Level.SEVERE, null, ex);
-          }
-    }
-    
     private ArrayList<HexTile> includeNeighbors(HexTile centerTile) {
         ArrayList<HexTile> toggleTargets = new ArrayList();
         toggleTargets.add(centerTile);
@@ -134,7 +117,6 @@ public class SandBox {
             @Override
             public void run() {
                 new SandBox();
-                playSoundLoop("Music/background.wav");
             }
         });
         
