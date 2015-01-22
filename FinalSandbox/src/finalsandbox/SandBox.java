@@ -13,6 +13,12 @@ import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+import java.applet.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -59,6 +65,7 @@ public class SandBox {
             Iterator iter = grid.tiles().entrySet().iterator();
             for (HexTile tile : grid.tiles().values()) {
                 if (tile.contains(e.getX(), e.getY())) {
+                    playSoundOnce(tile.soundPath());
                     ArrayList<HexTile> toggleTargets = includeNeighbors(tile);
                     for (HexTile hex : toggleTargets)
                         hex.toggle();
@@ -70,16 +77,13 @@ public class SandBox {
         
         @Override 
         public void mouseClicked(MouseEvent e) {           
-        }
-    
+        }    
         @Override
         public void mouseEntered(MouseEvent e) {   
-        }
-    
+        }    
         @Override
         public void mouseExited(MouseEvent e) {
-        }
-    
+        }    
         @Override
         public void mousePressed(MouseEvent e) {
         }
@@ -88,6 +92,24 @@ public class SandBox {
         screen.add(p);
         screen.pack();
         screen.setVisible(true);
+    }
+    
+    public static void playSoundOnce(String musicname) {
+        try {
+            AudioClip sound = Applet.newAudioClip(new URL("file:./"+musicname));
+            sound.play();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(SandBox.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void playSoundLoop(String musicname){
+        try {
+            AudioClip sound = Applet.newAudioClip(new URL("file:./"+musicname));
+            sound.loop();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(SandBox.class.getName()).log(Level.SEVERE, null, ex);
+          }
     }
     
     private ArrayList<HexTile> includeNeighbors(HexTile centerTile) {
@@ -112,6 +134,7 @@ public class SandBox {
             @Override
             public void run() {
                 new SandBox();
+                playSoundLoop("Music/background.wav");
             }
         });
         

@@ -27,6 +27,7 @@ public class HexGrid {
                                                     {3,-2,-1}, {3,-3,0}, {3,-4,1}, {3,-5,2}, {3,-6,3},
                                                     {4,-3,-1}, {4,-4,0}, {4,-5,1}, {4,-6,2}, {4,-7,3}};
     private static final int[] tileLights = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    private static final int[] tileSounds = {5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1};
     private static final int TILE_RADIUS = 50;
     private static final int NUM_LIT_TILES = 8;
     private final HashMap<String, HexTile> tiles;
@@ -42,8 +43,11 @@ public class HexGrid {
             isLit = false;
             if (tileLights[i] == 1)
                 isLit = true;
-            int[] coords = tileCoords[i]; 
-            tiles.put(Arrays.toString(coords), new HexTile(TILE_RADIUS, coords[0], coords[1], coords[2], isLit));
+            
+            String sound = calcSoundPath(i);
+            
+            int[] coords = tileCoords[i];
+            tiles.put(Arrays.toString(coords), new HexTile(TILE_RADIUS, coords[0], coords[1], coords[2], isLit, sound));
         }
         iter = tiles.entrySet().iterator();
     }
@@ -60,6 +64,12 @@ public class HexGrid {
             litIndex = indexList.get(i);
             tileLights[litIndex] = 1;
         }
+    }
+    
+    private String calcSoundPath(int tileIndex) {
+        Integer soundKey = tileSounds[tileIndex];
+        String path = "Music/tileTouch" + soundKey.toString() + ".wav";
+        return path;
     }
     
     public HashMap<String, HexTile> tiles() {

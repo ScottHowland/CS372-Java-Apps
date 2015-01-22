@@ -8,7 +8,6 @@ package finalsandbox;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
-import java.awt.Point;
 
 /**
  * A HexTile represents a hexagonal game tile whose position can be derived from
@@ -40,7 +39,9 @@ public class HexTile {
     //The color that will be used to fill the tile when it is drawn or changed
     private Color fillColor;
     //The polygon used by each tile to determine insideness
-    private final Polygon poly;    
+    private final Polygon poly;  
+    //The filepath for the sound played when this tile is clicked
+    private final String soundPath;
     
     /**
      * Establishes the tile's position in gridspace and whether it is lit or unlit.
@@ -51,8 +52,9 @@ public class HexTile {
      * @param gridY Y coordinate in gridspace.
      * @param gridZ Z coordinate in gridspace.
      * @param onOff The initial state of the tile as lit or unlit.
+     * @param soundPath The filepath to the on-click sound for this tile
      */
-    public HexTile(int radius, int gridX, int gridY, int gridZ, boolean onOff) {
+    public HexTile(int radius, int gridX, int gridY, int gridZ, boolean onOff, String soundPath) {
         gridCoords = new int[3];
         cornersX = new int[6];
         cornersY = new int[6];
@@ -63,6 +65,7 @@ public class HexTile {
         gridCoords[1] = gridY;
         gridCoords[2] = gridZ;
         bIsOn = onOff;
+        this.soundPath = soundPath;
         
         if (onOff)
             fillColor = Color.YELLOW;
@@ -169,6 +172,13 @@ public class HexTile {
      */
     public boolean isOn() {
         return bIsOn;
+    }
+    
+    /**
+     * @return The filePath to the sound file used when this tile is clicked 
+     */
+    public String soundPath() {
+        return soundPath;
     }
     
     /**
