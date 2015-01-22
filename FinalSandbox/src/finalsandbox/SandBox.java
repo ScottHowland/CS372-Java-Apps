@@ -5,9 +5,12 @@
  */
 package finalsandbox;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.Iterator;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,15 +21,8 @@ import javax.swing.SwingUtilities;
  * @author Scott
  */
 public class SandBox {
-    private HexTile tile = new HexTile(50,0,0,0, true);
-    private HexTile tile2 = new HexTile(50,0,-1,1, false);
-    private HexTile tile3 = new HexTile(50,1,-1,0, false);
-    private HexTile tile4 = new HexTile (50,1,-2,1, true);
-    private HexTile tile5 = new HexTile (50,0,-2,2, false);
-    private HexTile tile6 = new HexTile (50,2,-2,0, true);
-    private HexTile tile7 = new HexTile (50,2,-1,-1, false);
-    private HexTile[] grid = {tile, tile2, tile3, tile4, tile5, tile6, tile7};
-    private JFrame screen;    
+   private HexGrid grid;
+   private JFrame screen;   
     
     public SandBox() {
         initComponents();
@@ -36,28 +32,52 @@ public class SandBox {
         screen = new JFrame();
         screen.setResizable(false);
         screen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        grid = new HexGrid();
         
-        JPanel p = new JPanel() {
-            @Override
-            public void paint (Graphics g) {
-                for (HexTile t : grid) {
-                    
-                if (t.isOn())
-                     g.setColor(Color.yellow);                
-                else
-                    g.setColor(Color.GRAY);
-                g.fillPolygon(t.cornerXCoords(), t.cornerYCoords(), 6);
-                g.setColor(Color.black);
-                g.drawPolygon(t.cornerXCoords(), t.cornerYCoords(), 6);
+        JPanel p;
+       p = new JPanel() {
+           @Override
+           public void paint (Graphics g) {
+               Iterator iter = grid.iter();
+               for (HexTile value : grid.tiles().values()) {
+                   value.draw(g);
+               }
+           }
+           
+           @Override
+           public Dimension getPreferredSize() {
+               return new Dimension(800,600);
+           }
+       };
+        
+    p.addMouseListener(new MouseListener() { 
+        @Override public void mouseClicked(MouseEvent e) {
+            Iterator iter = grid.tiles().entrySet().iterator();
+            for (HexTile tile : grid.tiles().values()) {
+                if (tile.contains(e.getX(), e.getY())) {
+                    tile.toggle();
+                    p.repaint();
                 }
-            }
-        
-          @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(800,600);
-            }
-        };
-        
+            }        
+        }
+    
+        @Override
+        public void mouseEntered(MouseEvent e) {   
+        }
+    
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+    
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+    
+        @Override
+        public void mouseReleased(MouseEvent e){
+        }
+        });
+    
         screen.add(p);
         screen.pack();
         screen.setVisible(true);
@@ -70,6 +90,7 @@ public class SandBox {
                 new SandBox();
             }
         });
+        
     }
     
 }

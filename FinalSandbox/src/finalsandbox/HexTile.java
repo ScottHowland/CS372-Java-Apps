@@ -5,6 +5,11 @@
  */
 package finalsandbox;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.awt.Point;
+
 /**
  * A HexTile represents a hexagonal game tile whose position can be derived from
  * its position in the game's XYZ coordinate system. 
@@ -15,23 +20,27 @@ package finalsandbox;
  */
 public class HexTile {
     //The number of corners the tile has.
-    private final static int CORNERS = 6;
+    private final static int CORNERS = 6; //Don't need after constructor
     //The tile's gridspace coordinates.
     private final int[] gridCoords;
     //The grid coordinates of all potential neighbors of this tile.
     private int[][] neighborGridCoords;
     //The tile's center position in screenspace.
-    private int centerX, centerY;
+    private int centerX, centerY; //Don't need after constructor
     //Lengths for point calculation.
-    private final int radius; //The distance from the center to any corner.
-    private final int width; //Twice the radius. Distance between opposite corners.
-    private final int height; //Radius times the sqrt of 3. Distance between opposite sides.
+    private final int radius; //The distance from the center to any corner. Don't need after constructor
+    private final int width; //Twice the radius. Distance between opposite corners. Don't need after constructor
+    private final int height; //Radius times the sqrt of 3. Distance between opposite sides. Don't need after constructor
     //The X-coordinates of the tile's corners.
     private final int[] cornersX;
     //The Y-coordinates of the tile's corners.
     private final int[] cornersY;
     //Indicates whether the tile is currently "lit".
     private boolean bIsOn;
+    //The color that will be used to fill the tile when it is drawn or changed
+    private Color fillColor;
+    //The polygon used by each tile to determine insideness
+    private final Polygon poly;    
     
     /**
      * Establishes the tile's position in gridspace and whether it is lit or unlit.
@@ -55,9 +64,16 @@ public class HexTile {
         gridCoords[2] = gridZ;
         bIsOn = onOff;
         
+        if (onOff)
+            fillColor = Color.YELLOW;
+        else
+            fillColor = Color.GRAY;
+        
         calcCenter();
         calcCorners();
         calcNeighbors();
+        
+        poly = new Polygon(cornersX, cornersY, CORNERS);
     }
     
     /**
@@ -152,9 +168,24 @@ public class HexTile {
      * If the tile is lit, unlight it. If it's unlit, light it.
      */
     public void toggle() {
-        if (bIsOn)
+        if (bIsOn) {
+            fillColor = Color.GRAY;
             bIsOn = false;
-        else
+        }
+        else {
+            fillColor = Color.YELLOW;
             bIsOn = true;
+        }
+    }
+    
+    public void draw(Graphics g) {
+        g.setColor(fillColor);
+        g.fillPolygon(cornerXCoords(), cornerYCoords(), 6);
+        g.setColor(Color.black);
+        g.drawPolygon(cornerXCoords(), cornerYCoords(), 6);               
+    }
+    
+    public boolean contains(int x, int y) {
+        return poly.contains(x, y);
     }
 }
