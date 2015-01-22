@@ -10,6 +10,8 @@ import java.awt.Graphics;
 import java.util.Iterator;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 
 import javax.swing.JFrame;
@@ -51,14 +53,23 @@ public class SandBox {
        };
         
     p.addMouseListener(new MouseListener() { 
-        @Override public void mouseClicked(MouseEvent e) {
+        
+        @Override
+        public void mouseReleased(MouseEvent e) {
             Iterator iter = grid.tiles().entrySet().iterator();
             for (HexTile tile : grid.tiles().values()) {
                 if (tile.contains(e.getX(), e.getY())) {
-                    tile.toggle();
+                    ArrayList<HexTile> toggleTargets = includeNeighbors(tile);
+                    for (HexTile hex : toggleTargets)
+                        hex.toggle();
                     p.repaint();
+                    break;
                 }
             }        
+        }
+        
+        @Override 
+        public void mouseClicked(MouseEvent e) {           
         }
     
         @Override
@@ -72,15 +83,28 @@ public class SandBox {
         @Override
         public void mousePressed(MouseEvent e) {
         }
-    
-        @Override
-        public void mouseReleased(MouseEvent e){
-        }
         });
     
         screen.add(p);
         screen.pack();
         screen.setVisible(true);
+    }
+    
+    private ArrayList<HexTile> includeNeighbors(HexTile centerTile) {
+        ArrayList<HexTile> toggleTargets = new ArrayList();
+        toggleTargets.add(centerTile);
+        int[][] neighborCoords = centerTile.neighborGridCoords();
+        String neighborKey="";
+        HexTile temp = null;
+        
+        for (int[] i : neighborCoords) {
+            neighborKey = Arrays.toString(i);
+            if (grid.tiles().containsKey(neighborKey)) {
+                temp = grid.tiles().get(neighborKey);
+                toggleTargets.add(temp);
+            }
+        }
+        return toggleTargets;
     }
     
     public static void main(String[] args) {

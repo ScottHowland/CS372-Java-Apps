@@ -144,6 +144,13 @@ public class HexTile {
     }
     
     /**
+     * @return The grid coordinates of all neighboring tiles, real or hypothetical 
+     */
+    public int[][] neighborGridCoords() {
+        return neighborGridCoords;
+    }
+    
+    /**
      * @return The screenspace x coordinates of the tile's corners.
      */
     public int[] cornerXCoords() {
