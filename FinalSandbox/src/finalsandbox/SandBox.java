@@ -30,7 +30,6 @@ public class SandBox {
    private HexGrid grid;
    private JFrame screen;
    private SoundPlayer dj;
-   private Thread musicThread;
     
    /**
     * Initializes the components of the SandBox
@@ -151,7 +150,7 @@ public class SandBox {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Thread(new BackgroundMusic("Music/background.mp3")).start();
+                new Thread(new BackgroundMusic("Music/background.mp3", true)).start();
                 new SandBox();
             }
         });        
