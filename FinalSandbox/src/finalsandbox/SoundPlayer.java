@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class SoundPlayer {
     /**
      * Will play the sound specified by a given file path once
-     * @param musicname The file path to the sound effect to be played
+     * @param soundPath The file path to the sound effect to be played
      */
      public void playSoundOnce(String soundPath) {
         try {

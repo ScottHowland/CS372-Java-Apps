@@ -24,10 +24,11 @@ public class BackgroundMusic implements Runnable {
     //The file path to the music to be looped
     private final String musicName;
     //Whether or not the music will be looped
-    private boolean loop;
+    private final boolean loop;
     
     /**
      * @param musicName The file path to the music to be looped 
+     * @param loop Whether or not the sound file will be looped
      */
     public BackgroundMusic(String musicName, boolean loop) {
         this.musicName = musicName;
