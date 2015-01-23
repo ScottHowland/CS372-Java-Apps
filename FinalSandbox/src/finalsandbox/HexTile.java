@@ -19,17 +19,17 @@ import java.awt.Polygon;
  */
 public class HexTile {
     //The number of corners the tile has.
-    private final static int CORNERS = 6; //Don't need after constructor
+    private final static int CORNERS = 6;
     //The tile's gridspace coordinates.
     private final int[] gridCoords;
     //The grid coordinates of all potential neighbors of this tile.
     private int[][] neighborGridCoords;
     //The tile's center position in screenspace.
-    private int centerX, centerY; //Don't need after constructor
+    private int centerX, centerY;
     //Lengths for point calculation.
-    private final int radius; //The distance from the center to any corner. Don't need after constructor
-    private final int width; //Twice the radius. Distance between opposite corners. Don't need after constructor
-    private final int height; //Radius times the sqrt of 3. Distance between opposite sides. Don't need after constructor
+    private final int radius; //The distance from the center to any corner.
+    private final int width; //Twice the radius. Distance between opposite corners.
+    private final int height; //Radius times the sqrt of 3. Distance between opposite sides.
     //The X-coordinates of the tile's corners.
     private final int[] cornersX;
     //The Y-coordinates of the tile's corners.

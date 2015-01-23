@@ -17,7 +17,7 @@ import java.util.Iterator;
  * The HexGrid contains the containers organizing the setup of the game grid, 
  * as well as methods for generating the position of the active lights at the 
  * start of the game
- * @author showland17
+ * @author Scott Howland
  */
 public class HexGrid {
     //Stores the gridspace coordinates of every tile to be created
