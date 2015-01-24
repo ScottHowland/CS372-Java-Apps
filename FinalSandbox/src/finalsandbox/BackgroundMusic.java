@@ -22,9 +22,9 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
  */
 public class BackgroundMusic implements Runnable {
     //The file path to the music to be looped
-    private final String musicName;
+    private String musicName;
     //Whether or not the music will be looped
-    private final boolean loop;
+    private boolean loop;
     
     /**
      * @param musicName The file path to the music to be looped 
@@ -33,6 +33,17 @@ public class BackgroundMusic implements Runnable {
     public BackgroundMusic(String musicName, boolean loop) {
         this.musicName = musicName;
         this.loop = loop;
+    }
+    
+    public BackgroundMusic() {
+        musicName = null;
+        loop = false;
+    }
+    
+    public void set(String audioName, boolean loop) {
+        musicName = audioName;
+        this.loop = loop;
+        run();
     }
     
     /**
@@ -48,7 +59,7 @@ public class BackgroundMusic implements Runnable {
      * the specified audio file on a loop until the BackgroundMusic is terminated
      * @param musicPath The file path to the music to be looped
      */
-    private void playSoundLoop(String musicPath, boolean loop){
+    public void playSoundLoop(String musicPath, boolean loop){
         do {
             try {
                 //Create a file based on the file path, then a buffered input stream 

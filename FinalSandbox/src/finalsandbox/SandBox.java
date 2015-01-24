@@ -62,7 +62,6 @@ public class SandBox {
             */
            @Override
            public void paint (Graphics g) {
-               Iterator iter = grid.iter();
                for (HexTile value : grid.tiles().values()) {
                    value.draw(g);
                }
@@ -86,18 +85,7 @@ public class SandBox {
         
         @Override
         public void mouseReleased(MouseEvent e) {
-            Iterator iter = grid.tiles().entrySet().iterator();
-            for (HexTile tile : grid.tiles().values()) {
-                if (tile.contains(e.getX(), e.getY())) {
-                    dj.playSoundOnce(tile.soundPath());
-                    ArrayList<HexTile> toggleTargets = includeNeighbors(tile);
-                    
-                    for (HexTile hex : toggleTargets)
-                        hex.toggle();
-                    p.repaint();
-                    break;
-                }
-            }        
+            toggleTiles(e, p);
         }
         
         @Override 
@@ -117,6 +105,27 @@ public class SandBox {
         screen.add(p);
         screen.pack();
         screen.setVisible(true);
+    }
+    
+    private void toggleTiles(MouseEvent e, JPanel p) {
+        for (HexTile tile : grid.tiles().values()) {
+                if (tile.contains(e.getPoint())) {
+                    dj.playSoundOnce(tile.soundPath());
+                    ArrayList<HexTile> toggleTargets = includeNeighbors(tile);
+                    
+                    for (HexTile hex : toggleTargets)
+                        hex.toggle();
+                    p.repaint();
+                    
+                    if (grid.isWinCondition())
+                        victory();
+                    break;
+                }
+            }        
+    }
+    
+    private void victory() { 
+       JPanel p = new JPanel();
     }
 
     /**

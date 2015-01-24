@@ -8,6 +8,7 @@ package finalsandbox;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.awt.Point;
 
 /**
  * A HexTile represents a hexagonal game tile whose position can be derived from
@@ -19,29 +20,29 @@ import java.awt.Polygon;
  */
 public class HexTile {
     //The number of corners the tile has.
-    private final static int CORNERS = 6;
+    private static int CORNERS = 6;
     //The tile's gridspace coordinates.
-    private final int[] gridCoords;
+    private int[] gridCoords;
     //The grid coordinates of all potential neighbors of this tile.
     private int[][] neighborGridCoords;
     //The tile's center position in screenspace.
     private int centerX, centerY;
     //Lengths for point calculation.
-    private final int radius; //The distance from the center to any corner.
-    private final int width; //Twice the radius. Distance between opposite corners.
-    private final int height; //Radius times the sqrt of 3. Distance between opposite sides.
+    private int radius; //The distance from the center to any corner.
+    private int width; //Twice the radius. Distance between opposite corners.
+    private int height; //Radius times the sqrt of 3. Distance between opposite sides.
     //The X-coordinates of the tile's corners.
-    private final int[] cornersX;
+    private int[] cornersX;
     //The Y-coordinates of the tile's corners.
-    private final int[] cornersY;
+    private int[] cornersY;
     //Indicates whether the tile is currently "lit".
     private boolean bIsOn;
     //The color that will be used to fill the tile when it is drawn or changed
     private Color fillColor;
     //The polygon used by each tile to determine insideness
-    private final Polygon poly;  
+    private Polygon poly;  
     //The filepath for the sound played when this tile is clicked
-    private final String soundPath;
+    private String soundPath;
     
     /**
      * Establishes the tile's position in gridspace and whether it is lit or unlit.
@@ -55,6 +56,15 @@ public class HexTile {
      * @param soundPath The filepath to the on-click sound for this tile
      */
     public HexTile(int radius, int gridX, int gridY, int gridZ, boolean onOff, String soundPath) {
+        initFields(radius, gridX, gridY, gridZ, onOff, soundPath);       
+        calcCenter();
+        calcCorners();
+        calcNeighbors();
+        
+        poly = new Polygon(cornersX, cornersY, CORNERS);
+    }
+    
+    private void initFields(int radius, int gridX, int gridY, int gridZ, boolean onOff, String soundPath) {
         gridCoords = new int[3];
         cornersX = new int[6];
         cornersY = new int[6];
@@ -71,12 +81,6 @@ public class HexTile {
             fillColor = Color.YELLOW;
         else
             fillColor = Color.GRAY;
-        
-        calcCenter();
-        calcCorners();
-        calcNeighbors();
-        
-        poly = new Polygon(cornersX, cornersY, CORNERS);
     }
     
     /**
@@ -202,7 +206,7 @@ public class HexTile {
         g.drawPolygon(cornerXCoords(), cornerYCoords(), 6);               
     }
     
-    public boolean contains(int x, int y) {
-        return poly.contains(x, y);
+    public boolean contains(Point p) {
+        return poly.contains(p);
     }
 }

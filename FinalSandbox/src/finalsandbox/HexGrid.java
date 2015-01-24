@@ -26,16 +26,21 @@ public class HexGrid {
                                                     {2,-1,-1}, {2,-2,0}, {2,-3,1}, {2,-4,2}, {2,-5,3},
                                                     {3,-2,-1}, {3,-3,0}, {3,-4,1}, {3,-5,2}, {3,-6,3},
                                                     {4,-3,-1}, {4,-4,0}, {4,-5,1}, {4,-6,2}, {4,-7,3}};
+    //The on-off light status of each tile at the start of the game. Is modified
+    //right before tile construction, but could also be edited to build specific
+    //lighting patterns at game initialization
     private static final int[] tileLights = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    //Each integer value corresponds to one of the five sound files each tile can
+    //play when clicked on
     private static final int[] tileSounds = {5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1};
+    //Determines the radius of each tile
     private static final int TILE_RADIUS = 50;
-    private static final int NUM_LIT_TILES = 8;
+    //Determines the number of tiles lit at the start of the game
+    private static final int NUM_LIT_TILES = 12;
+    //The data struture used to contain all the grid's tiles
     private final HashMap<String, HexTile> tiles;
-    private final Iterator iter;
-    private final Random rand;
     
     public HexGrid() {
-        rand = new Random();
         tiles = new HashMap();
         setLighting();
         boolean isLit;
@@ -49,7 +54,16 @@ public class HexGrid {
             int[] coords = tileCoords[i];
             tiles.put(Arrays.toString(coords), new HexTile(TILE_RADIUS, coords[0], coords[1], coords[2], isLit, sound));
         }
-        iter = tiles.entrySet().iterator();
+    }
+    
+    public boolean isWinCondition () {
+        int litCount = 0;
+        for (HexTile tile : tiles.values()) {
+            if (tile.isOn())
+                litCount++;
+        }
+        
+        return litCount <= 1;
     }
     
     private void setLighting() {
@@ -74,9 +88,5 @@ public class HexGrid {
     
     public HashMap<String, HexTile> tiles() {
         return tiles;
-    }
-    
-    public Iterator iter() {
-        return iter;
     }
 }
