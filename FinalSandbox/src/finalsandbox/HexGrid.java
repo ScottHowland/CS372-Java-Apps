@@ -38,6 +38,10 @@ public class HexGrid {
     //The data struture used to contain all the grid's tiles
     private final HashMap<String, HexTile> tiles;
     
+    /**
+     * Create a new Hashmap of Hextiles, determine their start-of-game lighting
+     * and sounds
+     */
     public HexGrid() {
         tiles = new HashMap();
         setLighting();
@@ -54,6 +58,10 @@ public class HexGrid {
         }
     }
     
+    /**
+     * Determine whether or not the player has won this round of the game
+     * @return Whether the player has won or not
+     */
     public boolean isWinCondition () {
         int litCount = 0;
         for (HexTile tile : tiles.values()) {
@@ -64,6 +72,9 @@ public class HexGrid {
         return litCount <= 1;
     }
     
+    /**
+     * Determine which lights are lit at the start of the game
+     */
     private void setLighting() {
         tileLights = new int[] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         int litIndex;
@@ -79,12 +90,20 @@ public class HexGrid {
         }
     }
     
+    /**
+     * Determine which sound file should be associated with a given tile
+     * @param tileIndex The index of the tile in a 25-element container
+     * @return The String associated with the tile's sound file-to-be
+     */
     private String calcSoundPath(int tileIndex) {
         Integer soundKey = tileSounds[tileIndex];
         String path = "Music/tileTouch" + soundKey.toString() + ".wav";
         return path;
     }
     
+    /**
+     * @return The HexTile Hashmap for this grid 
+     */
     public HashMap<String, HexTile> tiles() {
         return tiles;
     }

@@ -49,6 +49,10 @@ public class SandBox {
         initComponents();
     }
     
+    /**
+     * Creates any necessary directories to allow the creation of the text file
+     * tracking the user's scores
+     */
     private void setupFiles() {
         dir = new File("Player Stats");
         try {
@@ -125,7 +129,7 @@ public class SandBox {
         
         @Override
         public void mouseReleased(MouseEvent e) {
-            toggleTiles(e, gamePanel);
+            toggleTiles(e);
         }
         
         @Override 
@@ -150,10 +154,16 @@ public class SandBox {
         screen.setVisible(true);
     }
     
-    private void toggleTiles(MouseEvent e, JPanel p) {
+    /**
+     * Given a Hextile, determine what neighbors it has in the HexGrid, add
+     * the given tile and all its neighbor tiles to an ArrayList, then return
+     * that Arraylist
+     * @param e The event triggering the toggling of tiles
+     */
+    private void toggleTiles(MouseEvent e) {
         for (HexTile tile : grid.tiles().values()) {
                 if (tile.contains(e.getPoint())) {
-                    //dj.playSoundOnce(tile.soundPath());
+                    dj.playSoundOnce(tile.soundPath());
                     ArrayList<HexTile> toggleTargets = includeNeighbors(tile);
                     
                     for (HexTile hex : toggleTargets)
@@ -168,6 +178,13 @@ public class SandBox {
             }        
     }
     
+    /**
+     * Triggers when the player has achieved the game's win condition. 
+     * Set the final score for this round, then add that to the list of scores.
+     * Assess whether this latest score is the user's best. If it is, 
+     * set it to display that score in-game. Reset the grid and turn counter, then
+     * repaint the screen.
+     */
     private void victory() {
         Integer finalScore = playerScore.turnCounter();
         scores.add(finalScore);
@@ -201,6 +218,9 @@ public class SandBox {
         return toggleTargets;
     }
     
+    /**
+     * Determine which, of the player's previous scores, is the best
+     */
     private void calcBestScore() {
         int tempBest = 99999;
         if (!scores.isEmpty()) {
@@ -222,7 +242,7 @@ public class SandBox {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //new Thread(new BackgroundMusic("Music/background.mp3", true)).start();
+                new Thread(new BackgroundMusic("Music/background.mp3", true)).start();
                 new SandBox();
             }
         });        

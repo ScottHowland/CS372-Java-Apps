@@ -31,7 +31,7 @@ public class ScoreCounter {
             clickPlurality = " clicks";
         
         counterText = "Score: " + turnCounter.toString() + clickPlurality;
-        g.drawString(counterText, 415, 150);
+        g.drawString(counterText, 415, 100);
     }
     
     public void incCounter() {

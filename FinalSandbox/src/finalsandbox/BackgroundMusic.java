@@ -35,11 +35,19 @@ public class BackgroundMusic implements Runnable {
         this.loop = loop;
     }
     
+    /**
+     * If no file path is specified, then the musicName is initialized to null
+     */
     public BackgroundMusic() {
         musicName = null;
         loop = false;
     }
     
+    /**
+     * Sets the audio file's path and whether the sound file is to be looped
+     * @param audioName
+     * @param loop 
+     */
     public void set(String audioName, boolean loop) {
         musicName = audioName;
         this.loop = loop;

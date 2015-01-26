@@ -64,6 +64,15 @@ public class HexTile {
         poly = new Polygon(cornersX, cornersY, CORNERS);
     }
     
+    /**
+     * Initialize all the tile's data fields
+     * @param radius Distance from the tile's center to one of its corners
+     * @param gridX The tile's gridspace X coordinate
+     * @param gridY The tile's gridspace Y coordinate
+     * @param gridZ The tile's gridspace Z coordinate
+     * @param onOff Whether the tile is "lit" or not
+     * @param soundPath The filepath associated with the tile's sound clip
+     */
     private void initFields(int radius, int gridX, int gridY, int gridZ, boolean onOff, String soundPath) {
         gridCoords = new int[3];
         cornersX = new int[6];
@@ -199,6 +208,10 @@ public class HexTile {
         }
     }
     
+    /**
+     * Draws this tile
+     * @param g The Graphics object being used
+     */
     public void draw(Graphics g) {
         g.setColor(fillColor);
         g.fillPolygon(cornerXCoords(), cornerYCoords(), 6);
@@ -206,6 +219,11 @@ public class HexTile {
         g.drawPolygon(cornerXCoords(), cornerYCoords(), 6);               
     }
     
+    /**
+     * Determine whether a given point is inside this tile
+     * @param p The point being checked
+     * @return Whether the point is contained within this tile
+     */
     public boolean contains(Point p) {
         return poly.contains(p);
     }
