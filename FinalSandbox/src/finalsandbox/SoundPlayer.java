@@ -13,15 +13,6 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javazoom.jl.player.advanced.AdvancedPlayer;
-
 /**
  * The SoundPlayer class is to be used for playing short, sound effects in 
  * natively Java-supported audio formats (.WAV, .AU, etc)

@@ -9,10 +9,13 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.File;
 import java.awt.Graphics;
-import java.util.Iterator;
+import java.io.IOException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,15 +30,41 @@ import javax.swing.SwingUtilities;
  * @author Scott Howland, Deyi Ji
  */
 public class SandBox {
+   private ArrayList<Integer> scores;
+   private File dir, scoreDB;
    private HexGrid grid;
+   private HSDisplay recordDisplay;
+   private Integer bestScore;
    private JFrame screen;
+   private JPanel gamePanel;
+   private ScoreCounter playerScore;
+   private ScoreIO scoreManager;
    private SoundPlayer dj;
     
    /**
     * Initializes the components of the SandBox
     */
     public SandBox() {
+        setupFiles();
         initComponents();
+    }
+    
+    private void setupFiles() {
+        dir = new File("Player Stats");
+        try {
+            dir.mkdirs();
+        }
+        catch (Exception ex) {
+            Logger.getLogger(SandBox.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        scoreDB = new File(dir, "scores.txt");
+        try {
+            scoreDB.createNewFile();
+        }
+        catch (IOException ex) {
+             Logger.getLogger(SandBox.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -43,28 +72,39 @@ public class SandBox {
      * listen for and handle user input. The JPanel is then added to the JFrame
      */
     private void initComponents() {
-        screen = new JFrame();
-        screen.setResizable(false);
-        screen.getContentPane().setBackground(Color.red);
-        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        grid = new HexGrid();
         dj = new SoundPlayer();
-              
+        grid = new HexGrid();
+        playerScore = new ScoreCounter();
+        scoreManager = new ScoreIO();
+        scores = new ArrayList();
+        screen = new JFrame();
+        try {
+            scoreManager.readScores(scoreDB, scores);
+            calcBestScore();
+        }
+        catch (Exception ex) {
+            Logger.getLogger(SandBox.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        recordDisplay = new HSDisplay(bestScore);
+        
        /**
         * A JPanel will be able to draw the grid on demand, fit itself to a specified
         * resolution, as well as listen for, and respond to, user input
         */
-       JPanel p;
-       p = new JPanel() {
+       gamePanel = new JPanel() {
            /**
             * Draws each HexTile in the grid
             * @param g The system-supplied Graphics object to be used in the drawing process
             */
            @Override
            public void paint (Graphics g) {
+               super.paintComponent(g);
                for (HexTile value : grid.tiles().values()) {
                    value.draw(g);
                }
+               playerScore.drawScore(g);
+               recordDisplay.drawHS(g);
            }
            
            /**
@@ -81,11 +121,11 @@ public class SandBox {
         * tile clicked by a user, as well as its neighbors, before redrawing
         * the grid
         */
-        p.addMouseListener(new MouseListener() { 
+        gamePanel.addMouseListener(new MouseListener() { 
         
         @Override
         public void mouseReleased(MouseEvent e) {
-            toggleTiles(e, p);
+            toggleTiles(e, gamePanel);
         }
         
         @Override 
@@ -100,9 +140,12 @@ public class SandBox {
         @Override
         public void mousePressed(MouseEvent e) {
         }
-        });
-    
-        screen.add(p);
+        });    
+        
+        screen.setResizable(false);
+        screen.getContentPane().setBackground(Color.red);
+        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        screen.add(gamePanel);
         screen.pack();
         screen.setVisible(true);
     }
@@ -110,12 +153,13 @@ public class SandBox {
     private void toggleTiles(MouseEvent e, JPanel p) {
         for (HexTile tile : grid.tiles().values()) {
                 if (tile.contains(e.getPoint())) {
-                    dj.playSoundOnce(tile.soundPath());
+                    //dj.playSoundOnce(tile.soundPath());
                     ArrayList<HexTile> toggleTargets = includeNeighbors(tile);
                     
                     for (HexTile hex : toggleTargets)
                         hex.toggle();
-                    p.repaint();
+                    playerScore.incCounter();
+                    gamePanel.repaint();
                     
                     if (grid.isWinCondition())
                         victory();
@@ -124,8 +168,15 @@ public class SandBox {
             }        
     }
     
-    private void victory() { 
-       JPanel p = new JPanel();
+    private void victory() {
+        Integer finalScore = playerScore.turnCounter();
+        scores.add(finalScore);
+        calcBestScore();
+        recordDisplay.setBestScore(bestScore);
+        scoreManager.writeScore(scoreDB, finalScore);
+        playerScore.resetCounter();
+        grid = new HexGrid();
+        gamePanel.repaint();
     }
 
     /**
@@ -150,6 +201,18 @@ public class SandBox {
         return toggleTargets;
     }
     
+    private void calcBestScore() {
+        int tempBest = 99999;
+        if (!scores.isEmpty()) {
+            for (int i=0; i < scores.size(); i++) {
+                int currScore = scores.get(i);
+                if (currScore < tempBest)
+                    tempBest = currScore;
+            }
+        }
+        bestScore = tempBest;
+    }
+    
     /**
      * Creates a new SandBox to create an instance of the game, as well as
      * running the looping background music in a new thread
@@ -159,7 +222,7 @@ public class SandBox {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Thread(new BackgroundMusic("Music/background.mp3", true)).start();
+                //new Thread(new BackgroundMusic("Music/background.mp3", true)).start();
                 new SandBox();
             }
         });        

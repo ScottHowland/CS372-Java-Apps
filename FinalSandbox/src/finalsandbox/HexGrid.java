@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Random;
-import java.util.Iterator;
 
 /**
  * The HexGrid contains the containers organizing the setup of the game grid, 
@@ -29,7 +27,7 @@ public class HexGrid {
     //The on-off light status of each tile at the start of the game. Is modified
     //right before tile construction, but could also be edited to build specific
     //lighting patterns at game initialization
-    private static final int[] tileLights = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    private int[] tileLights;
     //Each integer value corresponds to one of the five sound files each tile can
     //play when clicked on
     private static final int[] tileSounds = {5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1};
@@ -67,6 +65,7 @@ public class HexGrid {
     }
     
     private void setLighting() {
+        tileLights = new int[] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         int litIndex;
         ArrayList<Integer> indexList = new ArrayList();
         for (int i=0; i < tileCoords.length; i++) {
