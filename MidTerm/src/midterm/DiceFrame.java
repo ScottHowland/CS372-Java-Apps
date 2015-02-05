@@ -21,8 +21,8 @@ public class DiceFrame extends javax.swing.JFrame {
 
     ArrayList<Player> players = new ArrayList();
     ArrayList<String> playerNames = new ArrayList();
-    String nameFileName = "C:\\Users\\showland17\\Documents\\GitHub\\CS372-Java-Apps\\MidTerm\\Names.txt";
-    String walletFileName = "C:\\Users\\showland17\\Documents\\GitHub\\CS372-Java-Apps\\MidTerm\\Wallets.txt";
+    String nameFileName = "Names.txt";
+    String walletFileName = "Wallets.txt";
     Player currentPlayer;
     File nameBase = new File(nameFileName);
     File walletBase = new File(walletFileName);
