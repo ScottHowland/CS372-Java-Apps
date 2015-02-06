@@ -34,6 +34,7 @@ public class Reviewer extends javax.swing.JFrame {
         }
         
         catch (Exception ex) {
+            //PT -- System.out.println isn't effective in a GUI
             System.out.println("Error initializing notes pane");
         }
     }
