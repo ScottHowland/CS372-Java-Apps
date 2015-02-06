@@ -25,7 +25,7 @@ public class Review {
         this.establishmentName = name;
         this.address = address;
         this.notes = notes;
-        this.rating = rating;
+        this.rating = rating; //PT -- verify rating in [1,5]
     }
     
     /**
